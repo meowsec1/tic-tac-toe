@@ -27,11 +27,8 @@ const player = function(playerName) {
     }
 }
 
-const player1 = player("Alice");
-const player2 = player("Bob");
-
 // GAMEBOARD FUNCTIONALITY
-const gameBoard = (function(player1, player2) {
+const gameBoard = function(player1, player2) {
     const board = [
         [null, null, null],
         [null, null, null],
@@ -150,16 +147,7 @@ const gameBoard = (function(player1, player2) {
     return {
         makeMove
     }
-})(player1, player2);
-
-// will be handled on the dom!
-gameBoard.makeMove(0, 2); // X takes top-right
-gameBoard.makeMove(0, 0); // O takes top-left (blocking move)
-gameBoard.makeMove(1, 1); // X takes center
-gameBoard.makeMove(0, 1); // O takes top-middle (blocking move)
-gameBoard.makeMove(2, 0);
-
-
+};
 
 
 const getPlayerNames = (function() {
@@ -183,6 +171,8 @@ const displayBoard = function(players) {
     const [player1, player2] = players;
     console.log(player1);
 
+    gameBoardInstance = gameBoard(player1, player2);
+
     const game = document.querySelector(".game");
     const board = document.querySelector(".board")
 
@@ -191,7 +181,7 @@ const displayBoard = function(players) {
         cell.addEventListener("click", function() {
             const row = Math.floor(i / 3);
             const col = i % 3;
-            console.log(`Clicked row ${row} col ${col}`);
+            gameBoardInstance.makeMove(row, col);
         })
         board.appendChild(cell);
     }
