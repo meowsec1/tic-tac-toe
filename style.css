@@ -2,9 +2,7 @@
     margin: 0;
 }
 
-.hidden {
-    display: none;
-}
+
 
 .board {
     display: grid;
@@ -32,4 +30,9 @@
 
 .board div:nth-child(-n+6) {
     border-bottom: 1px solid black;
+}
+
+
+.hidden {
+    display: none;
 }

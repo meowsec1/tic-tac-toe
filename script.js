@@ -12,8 +12,18 @@ const player = function(playerName) {
         console.log(`${name} wins! Their score is now ${score}.`)
     }
 
+    const getName = function() {
+        return name;
+    }
+
+    const getScore = function() {
+        return score;
+    }
+
     return {
-        handleWin
+        handleWin,
+        getName,
+        getScore
     }
 }
 
@@ -31,7 +41,19 @@ const gameBoard = (function(player1, player2) {
 
     let numMoves = 0;
     let currentPlayer = player1;
-    let currentTurn = "x"
+    let currentTurn = "x";
+
+    const resetGame = function() {
+        board.length = 0; // Clear the array
+        board.push(
+            [null, null, null],
+            [null, null, null],
+            [null, null, null]
+        );
+        numMoves = 0;
+        currentPlayer = player1;
+        currentTurn = "x";
+    }
 
     const changeTurn = function() {
         if (currentTurn === "x") {
@@ -111,12 +133,12 @@ const gameBoard = (function(player1, player2) {
 
             if (numMoves == 9) {
                 console.log("It's a draw!")
-                // reset board
+                resetGame();
             }
 
             else if (checkWinner(row, column)) {
                 currentPlayer.handleWin();
-                // reset board
+                resetGame();
             } 
 
             else {
@@ -151,25 +173,37 @@ const getPlayerNames = (function() {
             players.push(player(input.value));
         }
         startForm.classList.add("hidden")
-        displayBoard(players)
-        
+        displayBoard(players)    
     })
-
 })();
 
 
 
 const displayBoard = function(players) {
-    
     const [player1, player2] = players;
     console.log(player1);
+
+    const game = document.querySelector(".game");
+    const board = document.querySelector(".board")
+
+    for (let i = 0; i < 9; i++) {
+        const cell = document.createElement("div");
+        cell.addEventListener("click", function() {
+            const row = Math.floor(i / 3);
+            const col = i % 3;
+            console.log(`Clicked row ${row} col ${col}`);
+        })
+        board.appendChild(cell);
+    }
+
+    game.classList.remove("hidden");
+
+    playerOneStats = document.querySelector(".playerOneStats");
+    playerTwoStats = document.querySelector(".playerTwoStats");
+
+    playerOneStats.textContent = `${player1.getName()}'s score: ${player1.getScore()}`;
+    playerTwoStats.textContent = `${player2.getName()}'s score: ${player2.getScore()}`;
+
+
 }
-
-
-
-
-
-
-
-
 
