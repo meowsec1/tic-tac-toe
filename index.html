@@ -8,20 +8,26 @@
 <body>
 
     <form>
-        <label for="playerOne">
-            Player One:
-        </label>
-        <input type="text" id="playerOne" name="playerOne" required>
+        <div>
+            <label for="playerOne">
+                Player One:
+            </label>
+            <input type="text" id="playerOne" name="playerOne" required>
+        </div>
 
-        <label for="playerTwo">
-            Player Two:
-        </label>
-        <input type="text" id="playerTwo" name="playerTwo" required>
+        
+        <div>
+            <label for="playerTwo">
+                Player Two:
+            </label>
+            <input type="text" id="playerTwo" name="playerTwo" required>
+        </div>
         <button class="startGameButton" type="submit">Tic Tac Toe!</button>
     </form>
 
 
     <div class="game hidden">
+        <h2 class="currentTurn"></h2>
         <div class="board">
         </div>
         <div class="stats">

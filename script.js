@@ -141,7 +141,7 @@ const gameBoard = function(player1, player2) {
             }
 
             changeTurn();
-            return { move: true, result: "continue" };
+            return { move: true, result: "continue", player: currentPlayer };
         }
         return { move: false };
     }
@@ -178,6 +178,9 @@ const displayBoard = function(players) {
     const game = document.querySelector(".game");
     const board = document.querySelector(".board")
 
+    const currentTurn = document.querySelector(".currentTurn");
+    currentTurn.textContent = `${player1.getName()}'s turn!`;
+
     for (let i = 0; i < 9; i++) {
         const cell = document.createElement("div");
         cell.addEventListener("click", function() {
@@ -199,7 +202,6 @@ const displayBoard = function(players) {
                     // clear board
                     const cells = board.querySelectorAll("div");
                     for (const cell of cells) {
-                        console.log("Removed!")
                         cell.removeAttribute('class');
                     }
                 } else if (moveResult.result === "draw") {
@@ -208,9 +210,10 @@ const displayBoard = function(players) {
                     // clear board
                     const cells = board.querySelectorAll("div");
                     for (const cell of cells) {
-                        console.log("Removed!")
                         cell.removeAttribute('class');
                     }
+                } else {
+                    currentTurn.textContent = `${moveResult.player.getName()}'s turn!`;
                 }
             }
 
