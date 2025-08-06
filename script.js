@@ -52,8 +52,6 @@ const gameBoard = function(player1, player2) {
             [null, null, null]
         );
         numMoves = 0;
-        currentPlayer = player1;
-        currentTurn = "x";
     }
 
     const changeTurn = function() {
