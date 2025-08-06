@@ -40,6 +40,10 @@ const gameBoard = function(player1, player2) {
     let currentPlayer = player1;
     let currentTurn = "x";
 
+    const getCurrentTurn = function() {
+        return currentTurn;
+    }
+
     const resetGame = function() {
         board.length = 0; // Clear the array
         board.push(
@@ -124,28 +128,29 @@ const gameBoard = function(player1, player2) {
 
     const makeMove = function(row, column) {
         if (isLegalMove(row, column)) {
-            console.log(board);
             board[row][column] = currentTurn;
             ++numMoves;
 
-            if (numMoves == 9) {
-                console.log("It's a draw!")
-                resetGame();
-            }
-
-            else if (checkWinner(row, column)) {
+            if (checkWinner(row, column)) {
                 currentPlayer.handleWin();
                 resetGame();
-            } 
-
-            else {
-                changeTurn();
+                return { move: true, result: "win", winner: currentPlayer };
             }
-        }
 
+            if (numMoves == 9) {
+                resetGame();
+                return { move: true, result: "draw" };
+            }
+
+            changeTurn();
+            return { move: true, result: "continue" };
+        }
+        return { move: false };
     }
+
     return {
-        makeMove
+        makeMove,
+        getCurrentTurn,
     }
 };
 
@@ -166,7 +171,6 @@ const getPlayerNames = (function() {
 })();
 
 
-
 const displayBoard = function(players) {
     const [player1, player2] = players;
     console.log(player1);
@@ -181,8 +185,41 @@ const displayBoard = function(players) {
         cell.addEventListener("click", function() {
             const row = Math.floor(i / 3);
             const col = i % 3;
-            gameBoardInstance.makeMove(row, col);
-        })
+            const moveResult = gameBoardInstance.makeMove(row, col);
+
+            if (moveResult.move) {
+                if (gameBoardInstance.getCurrentTurn() === "x") {
+                    cell.classList.add("activeX");
+                } else {
+                    cell.classList.add("activeO");
+                }
+
+                // Handle result
+                if (moveResult.result === "win") {
+                    alert(`${moveResult.winner.getName()} wins!`);
+
+                    // clear board
+                    const cells = board.querySelectorAll("div");
+                    for (const cell of cells) {
+                        console.log("Removed!")
+                        cell.removeAttribute('class');
+                    }
+                } else if (moveResult.result === "draw") {
+                    alert("It's a draw!");
+
+                    // clear board
+                    const cells = board.querySelectorAll("div");
+                    for (const cell of cells) {
+                        console.log("Removed!")
+                        cell.removeAttribute('class');
+                    }
+                }
+            }
+
+            // Always update stats if needed
+            playerOneStats.textContent = `${player1.getName()}'s score: ${player1.getScore()}`;
+            playerTwoStats.textContent = `${player2.getName()}'s score: ${player2.getScore()}`;
+        });
         board.appendChild(cell);
     }
 
@@ -193,7 +230,6 @@ const displayBoard = function(players) {
 
     playerOneStats.textContent = `${player1.getName()}'s score: ${player1.getScore()}`;
     playerTwoStats.textContent = `${player2.getName()}'s score: ${player2.getScore()}`;
-
 
 }
 
