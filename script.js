@@ -26,6 +26,8 @@ const gameBoard = (function(player1, player2) {
         [null, null, null]
     ];
     const BOARD_LENGTH = 3;
+
+    let numMoves = 0;
     let currentPlayer = player1;
     let currentTurn = "x"
 
@@ -70,24 +72,54 @@ const gameBoard = (function(player1, player2) {
             return true;
         }
 
-        if (checkRowWinner(row) || checkColWinner(column)) {
-            return true;
+        const checkDiagWinner = function(row, column) {
+            if (row === column) {
+                // we are on diag
+                for (let i = 0; i < BOARD_LENGTH; i++) {
+                    if (board[i][i] !== currentTurn) {
+                        return false;
+                    } 
+                }
+                return true;
+            }
+            return false;
         }
 
+        const checkAntiDiagWinner = function(row, column) {
+            if (row + column == BOARD_LENGTH - 1) {
+                // we are on anti-diagonal
+                for (let i = 0; i < BOARD_LENGTH; i++) {
+                    if (board[i][BOARD_LENGTH - 1 - i] !== currentTurn) {
+                        return false;
+                    } 
+                }
+                return true; // All positions on anti-diagonal match currentTurn
+            }
+            return false; // Not on anti-diagonal
+        }
+
+        return (checkRowWinner(row) || checkColWinner(column) || checkDiagWinner(row, column) || checkAntiDiagWinner(row, column))
     }
 
     const makeMove = function(row, column) {
         if (isLegalMove(row, column)) {
             console.log(board);
             board[row][column] = currentTurn;
+            ++numMoves;
 
-            if (checkWinner(row, column)) {
-                currentPlayer.handleWin();
-            } 
-            else {
+            if (numMoves == 9) {
+                console.log("It's a draw!")
+                // reset board
             }
-            
-            changeTurn();
+
+            else if (checkWinner(row, column)) {
+                currentPlayer.handleWin();
+                // reset board
+            } 
+
+            else {
+                changeTurn();
+            }
         }
 
     }
@@ -97,9 +129,9 @@ const gameBoard = (function(player1, player2) {
 })(player1, player2);
 
 
-gameBoard.makeMove(0, 0);
-gameBoard.makeMove(1, 0);
-gameBoard.makeMove(0, 1);
-gameBoard.makeMove(1, 1);
+// will be handled on the dom!
+gameBoard.makeMove(0, 2); // X takes top-right
+gameBoard.makeMove(0, 0); // O takes top-left (blocking move)
+gameBoard.makeMove(1, 1); // X takes center
+gameBoard.makeMove(0, 1); // O takes top-middle (blocking move)
 gameBoard.makeMove(2, 0);
-gameBoard.makeMove(1, 2);
