@@ -1,3 +1,4 @@
+// PLAYER FUNCTIONALITY
 const player = function(playerName) {
     const name = playerName;
     let score = 0;
@@ -19,6 +20,7 @@ const player = function(playerName) {
 const player1 = player("Alice");
 const player2 = player("Bob");
 
+// GAMEBOARD FUNCTIONALITY
 const gameBoard = (function(player1, player2) {
     const board = [
         [null, null, null],
@@ -93,9 +95,9 @@ const gameBoard = (function(player1, player2) {
                         return false;
                     } 
                 }
-                return true; // All positions on anti-diagonal match currentTurn
+                return true;
             }
-            return false; // Not on anti-diagonal
+            return false;
         }
 
         return (checkRowWinner(row) || checkColWinner(column) || checkDiagWinner(row, column) || checkAntiDiagWinner(row, column))
@@ -128,10 +130,46 @@ const gameBoard = (function(player1, player2) {
     }
 })(player1, player2);
 
-
 // will be handled on the dom!
 gameBoard.makeMove(0, 2); // X takes top-right
 gameBoard.makeMove(0, 0); // O takes top-left (blocking move)
 gameBoard.makeMove(1, 1); // X takes center
 gameBoard.makeMove(0, 1); // O takes top-middle (blocking move)
 gameBoard.makeMove(2, 0);
+
+
+
+
+const getPlayerNames = (function() {
+    const startForm = document.querySelector("form");
+
+    startForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const players = [];
+        const inputs = document.querySelectorAll("input");
+        for (const input of inputs) {
+            players.push(player(input.value));
+        }
+        startForm.classList.add("hidden")
+        displayBoard(players)
+        
+    })
+
+})();
+
+
+
+const displayBoard = function(players) {
+    
+    const [player1, player2] = players;
+    console.log(player1);
+}
+
+
+
+
+
+
+
+
+

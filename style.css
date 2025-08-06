@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    padding: 20px;
+}
+
+.board div {
+    width: 200px;
+    height: 200px;
+    /* background-color: aqua; */
+}
+
+.board .activeX {
+    background-color: blue;
+}
+
+.board .activeO {
+    background-color: red;
+}
+
+.board div:nth-child(3n+1), .board div:nth-child(3n+2) {
+    border-right: 1px solid black;
+}
+
+.board div:nth-child(-n+6) {
+    border-bottom: 1px solid black;
+}
